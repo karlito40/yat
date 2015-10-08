@@ -1,4 +1,4 @@
-var HTTP = require('../constant-list/http');
+var HTTP = require('constant-list').HTTP;
 
 module.exports = function(req, res) { 
   console.log('handleRequest')

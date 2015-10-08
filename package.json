@@ -9,6 +9,7 @@
   "author": "Karlito40 <karlito40@gmail.com> (https://github.com/karlito40)",
   "license": "ISC",
   "dependencies": {
+    "constant-list": "0.0.1",
     "glob": "^5.0.15"
   }
 }

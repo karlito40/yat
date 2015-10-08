@@ -1,6 +1,6 @@
 var fs = require('fs')
 , String2 = require('../helper/string')
-, EXTENSION = require('../constant-list/extension')
+, EXTENSION = require('constant-list').EXTENSION
 ;
 
 module.exports.load = load;
