@@ -3,7 +3,7 @@ var Server = require('./http/server')
 , VM = require('./file/vm')
 , RouteDispatcher = require('./route/dispatcher')
 , Router = require('./route/router')
-, EXTENSION = require('./constant/extension')
+, EXTENSION = require('./constant-list/extension')
 , String2 = require('./helper/string')
 , glob = require('glob')
 ;
