@@ -26,22 +26,18 @@ function start() {
   });
 
   // Route to configure
-  // globSync will be better
-  glob('./routes/*.js', {}, function(err, files) {
-    console.log('files', files)
+  var files = glob.sync('./routes/*.js', {});
+  files.forEach(function(file) {
 
-    files.forEach(function(file) {
+    var path = file.split('/');
+    var groupName = String2.subUntill(path[path.length-1], EXTENSION.JS);
 
-      var path = file.split('/');
-      var groupName = String2.subUntill(path[path.length-1], EXTENSION.JS);
-
-      VM.load(`./routes/${groupName}`, {
-        Router: new Router(groupName)
-      });
-
+    VM.load(`./routes/${groupName}`, {
+      Router: new Router(groupName)
     });
 
   });
+
 
 
   var port = Config.get('port');

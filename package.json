@@ -4,12 +4,13 @@
   "description": "Yet another framework",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Karlito40 <karlito40@gmail.com> (https://github.com/karlito40)",
   "license": "ISC",
   "dependencies": {
     "constant-list": "0.0.1",
-    "glob": "^5.0.15"
+    "glob": "^5.0.15",
+    "mocha": "^2.3.3"
   }
 }
