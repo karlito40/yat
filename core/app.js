@@ -1,8 +1,9 @@
+'use strict';
+
 var Server = require('./http/server')
 , Accessor = require('./combine/accessor')
 , VM = require('./file/vm')
-, RouteDispatcher = require('./route/dispatcher')
-, Router = require('./route/router')
+, Router = require('./system/router')
 , EXTENSION = require('constant-list').EXTENSION
 , String2 = require('./helper/string')
 , glob = require('glob')
@@ -18,13 +19,14 @@ function start() {
   // Objects to configure
   VM.load('./bootstrap', {
     App: Config,
-    // Router: RouterConfig,
+    Router: new Router(),   // Router by default
     // Controller: ControllerConfig,
     // Database: DatabaseConfig,
     // View: ViewConfig
   });
 
   // Route to configure
+  // globSync will be better
   glob('./routes/*.js', {}, function(err, files) {
     console.log('files', files)
 
@@ -48,5 +50,5 @@ function start() {
   console.log('App start on port', port);
   console.log('Debug mode is set to', debug);
 
-  Server.start(Config.get('port'), RouteDispatcher);
+  Server.start(Config.get('port'), Router.Dispatcher);
 }

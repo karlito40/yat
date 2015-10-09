@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.subUntill = subUntill;
 module.exports.has = has;
 

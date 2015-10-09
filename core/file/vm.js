@@ -11,7 +11,7 @@ module.exports.load = load;
  * In the following code, the foo file has
  * a global access to FooContext and AnotherVar
  *
- *    `load('foo', {
+ *    `VM.load('foo', {
  *      FooContext: {
  *        hey: true
  *      },

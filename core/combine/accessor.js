@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.set = set;
 module.exports.get = get;
 module.exports.object = {
