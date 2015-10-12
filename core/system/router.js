@@ -1,6 +1,9 @@
 'use strict';
 
-var HTTP = require('constant-list').HTTP;
+var HTTP = require('constant-list').HTTP
+, View = require('./view');
+
+module.exports = Router;
 
 var methods = ['get', 'post', 'put', 'del']
 , handlers = {};;
@@ -39,14 +42,11 @@ function dispatch(req, res) {
 
   var uri = decodeURI(req.url);
 
-  var code = HTTP.PAGE_NOT_FOUND;
   if(handlers[method] && handlers[method][uri]) {
-    var code = HTTP.OK;
-
     // Promisify
     handlers[method][uri]
       .bind({
-        View: {},
+        View: View,
         Request: req,
         Response: res     // Will be useless with View
       })(/*params*/);     // params get, ...
@@ -63,4 +63,4 @@ function dispatch(req, res) {
 
 Router.Dispatcher = dispatch;
 
-module.exports = Router;
+

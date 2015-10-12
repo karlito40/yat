@@ -1,4 +1,5 @@
 var fs = require('fs')
+, isObject = require('util').isObject
 , String2 = require('../helper/string')
 , EXTENSION = require('constant-list').EXTENSION
 ;
@@ -22,6 +23,10 @@ module.exports.load = load;
  *
  */
 function load(filename, shareObjects) {
+  if(!isObject(shareObjects)) {
+    throw new Error('VM::load an object must be passed');
+  }
+  
   if(!String2.has(filename, EXTENSION.JS)) {
     filename += '.js';
   }
