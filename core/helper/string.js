@@ -4,7 +4,11 @@ module.exports.subUntill = subUntill;
 module.exports.has = has;
 
 function subUntill(s, encounter) {
-  return s.substr(0, s.indexOf(encounter));
+  var index = s.indexOf(encounter);
+
+  return (index != -1)
+    ? s.substr(0, s.indexOf(encounter))
+    : s;
 }
 
 function has(s, element) {
