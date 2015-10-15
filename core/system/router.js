@@ -1,7 +1,8 @@
 'use strict';
 
 var HTTP = require('constant-list').HTTP
-, View = require('./view');
+, View = require('./view')
+;
 
 module.exports = Router;
 
@@ -30,7 +31,7 @@ function addHandler(method, uri, cb) {
 
   if(handlers[method][uri]) {
     // Send event error
-    throw new Error(`Router::addHandler ${route} is already defined`);
+    throw new Error(`Router::addHandler ${uri} is already defined`);
   }
 
   handlers[method][uri] = cb;
@@ -41,23 +42,23 @@ function dispatch(req, res) {
   console.log('req.url', req.url);
 
   var uri = decodeURI(req.url);
-
+  
   if(handlers[method] && handlers[method][uri]) {
-    // Promisify
     handlers[method][uri]
       .bind({
-        View: View,
         Request: req,
-        Response: res     // Will be useless with View
-      })(/*params*/);     // params get, ...
+        Response: res,
+        render: function(viewName, data, code) {
+          View.render(res, viewName, data, code); 
+        },
+        json: function(content) {
+          View.json(res, content);
+        }
+      })(/*params*/);
   } else {
-    // 404
+    View.error(res, 'PAGE NOT FOUND', HTTP.NOT_FOUND);
   }
 
-  res.writeHead(HTTP.OK, {
-    'Content-Type': 'text/html'
-  });
-  res.end('Yeaaa');
 }
 
 

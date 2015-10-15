@@ -1,7 +1,6 @@
 
 /**
  * Application configuration.
- * Every variable set here will be available as shown below
  *  `var AppConfig = require('yaat/app').Config;
  *   var yourVariable = AppConfig.get('yourVariableKey');
 ` */
@@ -15,8 +14,13 @@ App.set({
 /**
  * Router configuration
  */
+
 Router.get('/', function() {
-  console.log('root works !')
+  this.render('test', {hello: 'world'});
+});
+
+Router.get('/json', function() {
+  this.json({toto: "tata"});  
 });
 
 // Router.pattern('id', '[0-9]+');
@@ -25,9 +29,6 @@ Router.get('/', function() {
 
 
 // Controller
-
-
-
 
 //
 // Route.middleware([

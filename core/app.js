@@ -19,6 +19,7 @@ function start() {
   // Objects to configure
   VM.load('./bootstrap', {
     App: Config,
+    // View: View,
     Router: new Router(),   // Router by default
     // Controller: ControllerConfig,
     // Database: DatabaseConfig,
@@ -37,8 +38,6 @@ function start() {
     });
 
   });
-
-
 
   var port = Config.get('port');
   var debug = Config.get('DEBUG');
