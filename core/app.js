@@ -44,6 +44,6 @@ function start() {
 
   console.log('App start on port', port);
   console.log('Debug mode is set to', debug);
-
-  Server.start(Config.get('port'), Router.Dispatcher);
+  
+  Server.start(Config, Router.Dispatcher);
 }

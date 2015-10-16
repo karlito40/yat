@@ -7,6 +7,10 @@
 App.set({
   DEBUG: true,
   port: 9999,
+  // ssl: {
+  //   key: './key',  
+  //   cert: './cert'  
+  // }
 });
 
 // App.on('error')
