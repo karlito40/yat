@@ -9,7 +9,7 @@ module.exports.error = error;
 var renderFile = Promise.denodeify(jade.renderFile)
 
 function render(res, viewName, data, code) {
-  jade.renderFile(`./views/${viewName}.jade`, data)
+  renderFile(`./views/${viewName}.jade`, data)
     .then(function(content){
       res.writeHead(HTTP.OK, {
         'Content-Type': 'text/html'

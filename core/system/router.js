@@ -2,66 +2,215 @@
 
 var HTTP = require('constant-list').HTTP
 , View = require('./view')
+, extend = require('util')._extend
+, querystring = require('querystring')
+, Promise = require('promise')
+, maxPostData = 2 * 1024 * 1024 // 2mb
 ;
 
 module.exports = Router;
 
-var methods = ['get', 'post', 'put', 'del']
-, handlers = {};;
+var methods = [HTTP.GET, HTTP.POST, HTTP.PUT, HTTP.DELETE]
+, directHandlers = {}
+, fallbackHandlers = {};
+
 
 function Router(groupName) {
   this.root = (groupName) ? `/${groupName}` : '';
 }
 
+/**
+ * Associate each HTTP methods
+ */
 methods.forEach(function(method){
 
   Router.prototype[method] = (function(method) {
     return function(uri, cb) {
-      return addHandler(method, `${this.root}${uri}`, cb);
+      return register(method, `${this.root}${uri}`, cb);
     }
   })(method);
+  
+  directHandlers[method] = {};
+  fallbackHandlers[method] = {};
 
 });
 
-function addHandler(method, uri, cb) {
-  console.log('add handler', method, uri)
-  if(!handlers[method]) {
-    handlers[method] = {};
+
+function register(method, uri, cb) {
+  addDirectHandler(method, uri, cb);
+  addFallbackHandler(method, uri, cb);
+}
+
+
+/**
+ * Handle the uris without any parameter
+ */
+function addDirectHandler(method, uri, cb) {
+  if(!directHandlers[method]) {
+    directHandlers[method] = {};
   }
 
-  if(handlers[method][uri]) {
-    // Send event error
+  if(directHandlers[method][uri]) {
     throw new Error(`Router::addHandler ${uri} is already defined`);
   }
 
-  handlers[method][uri] = cb;
+  directHandlers[method][uri] = {
+    cb: cb, 
+    args: []
+  };
+  
 }
 
-function dispatch(req, res) {
+/**
+ * Handle the variable uris
+ * Example: /foo/:uid/simple/:anotherUid
+ */
+function addFallbackHandler(method, uri, cb) {
+  
+  var pathList = getPathList(uri);
+  
+  if(!fallbackHandlers[method]) {
+    fallbackHandlers[method] = {};
+  }
+  
+  if(!fallbackHandlers[method][pathList.length]) {
+    fallbackHandlers[method][pathList.length] = [];  
+  }
+  
+  var description = pathList.map(function(param) {
+    return {
+      param: param,
+      isVar: param.startsWith(':')
+    }  
+  });
+  
+  fallbackHandlers[method][pathList.length].push({
+    description: description,
+    cb: cb
+  });
+  
+}
+
+/**
+ * Transfer the request to the correponding callback
+ */
+function Dispatcher(req, res) {
   var method = req.method.toLowerCase();
-  console.log('req.url', req.url);
 
   var uri = decodeURI(req.url);
   
-  if(handlers[method] && handlers[method][uri]) {
-    handlers[method][uri]
-      .bind({
-        Request: req,
-        Response: res,
-        render: function(viewName, data, code) {
-          View.render(res, viewName, data, code); 
-        },
-        json: function(content) {
-          View.json(res, content);
+  var handler = (DirectDispatcher(method, uri) || FallbackDispatcher(method, uri));
+  if(handler) {
+    
+    return getBody(req)
+      .then(function(body){
+        
+        handler.args.push(body);  
+        
+        return handler.cb.apply({
+          request: req,
+          response: res,
+          render: function(viewName, data, code) {
+            View.render(res, viewName, data, code); 
+          },
+          json: function(content) {
+            View.json(res, content);
+          }
+        }, handler.args);
+      })
+      .catch(function(e) {
+        if(e == HTTP.REQUEST_ENTITY_TOO_LARGE) {
+          return View.error(res, 'ENTITY TOO LARGE', e);
         }
-      })(/*params*/);
-  } else {
-    View.error(res, 'PAGE NOT FOUND', HTTP.NOT_FOUND);
+        
+        return View.error(res, 'FORBIDDEN', HTTP.FORBIDDEN);
+      });
+   
   }
+  
+  return View.error(res, 'PAGE NOT FOUND', HTTP.NOT_FOUND);
 
 }
 
+Router.Dispatcher = Dispatcher;
 
-Router.Dispatcher = dispatch;
+/**
+ * Simple uri provider
+ */
+function DirectDispatcher(method, uri) {
+  return directHandlers[method][uri];
+}
+
+
+/**
+ * Magical uri provider
+ * Transform the given parameter
+ */
+function FallbackDispatcher(method, uri) {
+
+  var pathList = getPathList(uri);
+    
+  var fallbackHandlersList = fallbackHandlers[method][pathList.length];
+  if(!fallbackHandlersList) {
+    return;
+  }
+  
+  var args = [];
+  for(var i=0; i<fallbackHandlersList.length; i++) {
+    args.length = 0;
+
+    var fallback = fallbackHandlersList[i];
+    
+    var next = fallback.description.some(function(o, key){
+      if(o.param != pathList[key] && !o.isVar) {
+        return true;
+      } else if(o.isVar) {
+        args.push(pathList[key]);
+      }
+      return false;
+    });
+    
+    if(!next) {
+      return {
+        cb: fallback.cb,
+        args: args
+      };
+            
+    }
+    
+  }
+
+  return;
+  
+}
+
+
+function getBody(req) {
+  
+  return new Promise(function(resolve, reject) {
+    var data = '';
+    req.on('data', function(chunk){
+      data += chunk;
+      if(data.length > maxPostData) {
+        data = '';
+        this.destroy();
+        reject(HTTP.REQUEST_ENTITY_TOO_LARGE);
+      }
+    })
+    .on('end', function() {
+      resolve(querystring.parse(data));
+    });
+  });
+    
+    
+}
+
+function getPathList(uri) {
+  return uri.split('/')
+    .filter(function(element) {
+      return element.length;
+    });
+}
+
 
 
