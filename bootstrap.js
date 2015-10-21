@@ -13,6 +13,10 @@ App.set({
   // }
 });
 
+Module.add([
+  require('../../modules/cache/varnish')
+]);
+
 // App.on('error')
 
 /**

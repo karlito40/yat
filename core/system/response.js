@@ -1,5 +1,6 @@
 
 var View = require('./view')
+, Event = require('./event')
 , HTTP = require('constant-list').HTTP;
 
 function Response(res) {
@@ -16,12 +17,15 @@ Response.prototype.send = function(view) {
     'Content-Type': view.contentType
   });
   
+  Event.trigger(Event.RESPONSE, this);
+  
   this.res.end(view.body);
   return this.res;
 }
 
 Response.prototype._control = function(job, code) {
   this.code = code || HTTP.OK;
+  
   return job()
     .catch(function(e){
       self.code = HTTP.INTERNAL_ERROR;

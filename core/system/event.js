@@ -49,3 +49,5 @@ function dispose(cb) {
 function getChannel(name) {
   return channels[name];
 }
+
+

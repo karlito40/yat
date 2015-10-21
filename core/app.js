@@ -4,6 +4,7 @@ var Server = require('./http/server')
 , Accessor = require('./combine/accessor')
 , VM = require('./file/vm')
 , Router = require('./system/router')
+, Module = require('./system/module')
 , EXTENSION = require('constant-list').EXTENSION
 , String2 = require('./helper/string')
 , glob = require('glob')
@@ -19,12 +20,11 @@ function start() {
   // Objects to configure
   VM.load('./bootstrap', {
     App: Config,
-    // View: View,
+    Module: Module,
     Router: new Router(),   // Router by default
-    // Controller: ControllerConfig,
-    // Database: DatabaseConfig,
-    // View: ViewConfig
   });
+  
+  Module.start();
 
   // Route to configure
   var files = glob.sync('./routes/*.js', {});
