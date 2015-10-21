@@ -72,7 +72,6 @@ function render(viewName, data) {
 }
 
 function partial(viewName, data) {
-  console.log('partial', viewName, data);
   var resolveData = function() {
     return resolveObject(data);
   };
