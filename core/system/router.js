@@ -1,10 +1,11 @@
 'use strict';
 
 var HTTP = require('constant-list').HTTP
-, View = require('./view')
-, extend = require('util')._extend
+// , View = require('./view')
+// , extend = require('util')._extend
 , querystring = require('querystring')
 , Promise = require('promise')
+, Response = require('./response')
 , maxPostData = 2 * 1024 * 1024 // 2mb
 ;
 
@@ -95,42 +96,39 @@ function addFallbackHandler(method, uri, cb) {
  * Transfer the request to the correponding callback
  */
 function Dispatcher(req, res) {
-  var method = req.method.toLowerCase();
-
-  var uri = decodeURI(req.url);
+  var method = req.method.toLowerCase()
+  , response = new Response(res)
+  , uri = decodeURI(req.url);
   
   var handler = (DirectDispatcher(method, uri) || FallbackDispatcher(method, uri));
   if(handler) {
     
     return getBody(req)
       .then(function(body){
-        
         handler.args.push(body);  
         
         return handler.cb.apply({
           request: req,
-          response: res,
-          render: function(viewName, data, code) {
-            View.render(res, viewName, data, code); 
-          },
-          json: function(content) {
-            View.json(res, content);
-          }
+          render: response.render.bind(response),
+          json: response.json.bind(response)
         }, handler.args);
+        
       })
       .catch(function(e) {
         if(e == HTTP.REQUEST_ENTITY_TOO_LARGE) {
-          return View.error(res, 'ENTITY TOO LARGE', e);
+          return response.error('ENTITY TOO LARGE', e);
         }
-        
-        return View.error(res, 'FORBIDDEN', HTTP.FORBIDDEN);
+
+        return response.error('FORBIDDEN', HTTP.FORBIDDEN);
       });
    
   }
   
-  return View.error(res, 'PAGE NOT FOUND', HTTP.NOT_FOUND);
-
+  return response.error('PAGE NOT FOUND', HTTP.NOT_FOUND);
 }
+
+
+
 
 Router.Dispatcher = Dispatcher;
 
