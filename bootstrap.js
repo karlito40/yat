@@ -20,7 +20,10 @@ App.set({
  */
 
 Router.get('/', function() {
-  this.render('test', {hello: 'world'});
+  this.render('test', {
+    hello: 'world',
+    partialTest: this.partial('simple_partial')
+  });
 });
 
 var querystring = require('querystring');
@@ -34,11 +37,15 @@ Router.post('/simple/:uid', function(uid, body) {
 })
 
 Router.get('/toto/:uid', function(uid) {
-  this.render('test', {hello: `your uid is ${uid}`});
+  this.render('test', {
+    hello: `your uid is ${uid}`
+  });
 })
 
 Router.get('/foo/:uid/simple/:anotherUid', function(uid, anotherUid){
-  this.render('test', {hello: `your uid is ${uid}, and anotherUid is ${anotherUid}`});
+  this.render('test', {
+    hello: `your uid is ${uid}, and anotherUid is ${anotherUid}`
+  });
 });
 
 Router.get('/json', function() {

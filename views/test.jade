@@ -1,11 +1,7 @@
 doctype html
 html(lang="en")
   head
-    title= pageTitle
-    script(type='text/javascript').
-      if (foo) {
-         bar(1 + 5)
-      }
+    title Yat 
   body
     h1 Jade - node template engine #{hello}
     #container.col
@@ -18,3 +14,5 @@ html(lang="en")
         templating language with a
         strong focus on performance
         and powerful features.
+      
+    !{partialTest}

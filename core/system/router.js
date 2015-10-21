@@ -1,8 +1,7 @@
 'use strict';
 
 var HTTP = require('constant-list').HTTP
-// , View = require('./view')
-// , extend = require('util')._extend
+, View = require('./view')
 , querystring = require('querystring')
 , Promise = require('promise')
 , Response = require('./response')
@@ -110,7 +109,8 @@ function Dispatcher(req, res) {
         return handler.cb.apply({
           request: req,
           render: response.render.bind(response),
-          json: response.json.bind(response)
+          json: response.json.bind(response),
+          partial: View.partial
         }, handler.args);
         
       })
