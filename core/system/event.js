@@ -1,7 +1,9 @@
 var ArrayHelper = require('../helper/array');
 
+module.exports.trigger = trigger;
 module.exports.register = register;
 module.exports.dispose = dispose;
+module.exports.getChannel = getChannel;
 
 var channels = {};
 
@@ -42,4 +44,8 @@ function dispose(cb) {
   
   return false;
   
+}
+
+function getChannel(name) {
+  return channels[name];
 }
