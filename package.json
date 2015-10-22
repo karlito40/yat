@@ -13,12 +13,16 @@
   "author": "Karlito40 <karlito40@gmail.com> (https://github.com/karlito40)",
   "license": "ISC",
   "dependencies": {
+    "browserify": "^11.2.0",
     "chai": "^3.3.0",
     "constant-list": "0.0.4",
     "glob": "^5.0.15",
     "graphql": "^0.4.7",
     "jade": "^1.11.0",
-    "promise": "^7.0.4"
+    "node-jsx": "^0.13.3",
+    "promise": "^7.0.4",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0"
   },
   "devDependencies": {
     "mocha": "^2.3.3",

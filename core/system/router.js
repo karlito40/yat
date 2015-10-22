@@ -110,7 +110,8 @@ function Dispatcher(req, res) {
           request: req,
           render: response.render.bind(response),
           json: response.json.bind(response),
-          partial: View.partial
+          partial: View.partial,
+          react: View.react
         }, handler.args);
         
       })

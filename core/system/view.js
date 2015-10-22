@@ -1,12 +1,15 @@
 var jade = require('jade')
 , HTTP = require('constant-list').HTTP
 , Promise = require('promise')
-, resolveObject = require('../helper/promise').resolveObject;
+, resolveObject = require('../helper/promise').resolveObject
+, React = require('react') 
+, ReactDOMServer = require("react-dom/server");
 
 module.exports.render = render;
 module.exports.json = json;
 module.exports.error = error;
 module.exports.partial = partial;
+module.exports.react = react;
 
 var renderFile = Promise.denodeify(jade.renderFile);
 
@@ -39,7 +42,10 @@ function partial(viewName, data) {
     .then(compile)
 }
 
-
+function react(Component) {
+  var ReactApp = React.createFactory(Component);
+  return ReactDOMServer.renderToString(ReactApp());
+}
 
 function json(content) {
   return Promise.resolve(

@@ -17,17 +17,23 @@ Module.add([
   require('../../modules/cache/varnish')
 ]);
 
-// App.on('error')
-
 /**
  * Router configuration
  */
 
 Router.get('/', function() {
+  
+  var reactComponent = require("../../public/js/components/app");
+  
+  console.log('this', this);
+  
   this.render('test', {
     hello: 'world',
-    partialTest: this.partial('simple_partial')
+    partialTest: this.react(reactComponent)
+    // partialTest: this.partial('simple_partial')
+    // partialTest: markup
   });
+  
 });
 
 var querystring = require('querystring');
@@ -35,9 +41,6 @@ var util = require('util');
 
 Router.post('/simple/:uid', function(uid, body) {
   this.response.end('You Posted:\n' + body);
-  
-  // console.log(this.request.body);
-  // this.json({result: true});  
 })
 
 Router.get('/toto/:uid', function(uid) {
@@ -56,14 +59,3 @@ Router.get('/json', function() {
   this.json({toto: "tata"});  
 });
 
-// Router.pattern('id', '[0-9]+');
-
-// View.layout
-
-
-// Controller
-
-//
-// Route.middleware([
-//   Auth
-// ])
