@@ -7,9 +7,10 @@
 App.set({
   DEBUG: true,
   port: 9999,
+  // publicFolder: './public'
   // ssl: {
-  //   key: './key',  
-  //   cert: './cert'  
+  //   key: './key',
+  //   cert: './cert'
   // }
 });
 
@@ -22,25 +23,16 @@ Module.add([
  */
 
 Router.get('/', function() {
-  
   var reactComponent = require("../../public/js/components/app");
-  
-  console.log('this', this);
-  
+
   this.render('test', {
     hello: 'world',
     partialTest: this.react(reactComponent)
-    // partialTest: this.partial('simple_partial')
-    // partialTest: markup
   });
-  
 });
 
-var querystring = require('querystring');
-var util = require('util');
-
-Router.post('/simple/:uid', function(uid, body) {
-  this.response.end('You Posted:\n' + body);
+Router.get('/simple/:uid', function(uid, body) {
+  this.res.end('You Posted:\n' + uid);
 })
 
 Router.get('/toto/:uid', function(uid) {
@@ -56,6 +48,5 @@ Router.get('/foo/:uid/simple/:anotherUid', function(uid, anotherUid){
 });
 
 Router.get('/json', function() {
-  this.json({toto: "tata"});  
+  this.json({toto: "tata"});
 });
-

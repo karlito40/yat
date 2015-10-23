@@ -1,4 +1,4 @@
-var TYPE = require('constant-list').TYPE
+var JS = require('constant-list').JS
 , Promise = require('promise');
 
 function resolveObject(data, cb) {
@@ -22,7 +22,7 @@ function resolveObject(data, cb) {
   
   for(var key in data) {
     var value = data[key]; 
-    if(typeof value == TYPE.OBJECT && value.then) {
+    if(typeof value == JS.OBJECT && value.then) {
       value.then(
           (function(key) {
             return function(res) {

@@ -23,6 +23,7 @@ function start() {
     Module: Module,
     Router: new Router(),   // Router by default
   });
+  Router.configure(Config)
   
   Module.start();
 

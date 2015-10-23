@@ -1,7 +1,9 @@
 
 var View = require('./view')
 , Event = require('./event')
-, HTTP = require('constant-list').HTTP;
+, HTTP = require('constant-list').HTTP
+, mime = require('mime')
+, fs = require('fs');
 
 function Response(res) {
   this.code = null;
@@ -50,7 +52,16 @@ Response.prototype.json = function(content, code) {
 Response.prototype.error = function(message, code) {
   this._control(function(){
     return View.error(message);
-  }, code)
+  }, code);
+}
+
+Response.prototype.asset = function(filepath) {
+  this.res.writeHead(200, {
+    'Content-Type': mime.lookup(filepath),
+  });
+
+  var readStream = fs.createReadStream(filepath);
+  readStream.pipe(this.res);
 }
 
 Response.prototype._notImplemented = function(){

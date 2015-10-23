@@ -4,7 +4,6 @@ module.exports.add = add;
 module.exports.start = start;
 
 function add(patch) {
-  console.log('add patch', patch)
   if(Array.isArray(patch)) {
     list = list.concat(patch);
   } else {
@@ -15,7 +14,6 @@ function add(patch) {
 
 function start() {
   list.forEach(function(patch) {
-    console.log('patch', patch);
     patch();
   });
 }

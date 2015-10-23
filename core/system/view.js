@@ -51,7 +51,6 @@ function json(content) {
   return Promise.resolve(
     _result('application/json', JSON.stringify(content))
   );
-  
 }
 
 function error(message) {
