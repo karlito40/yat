@@ -1,5 +1,5 @@
 var JS = require('constant-list').JS
-, Promise = require('promise');
+, denodeify = require('promise').denodeify;
 
 function resolveObject(data, cb) {
   if(!data) {
@@ -43,4 +43,4 @@ function resolveObject(data, cb) {
   }
 }
 
-module.exports.resolveObject = Promise.denodeify(resolveObject);
+module.exports.resolveObject = denodeify(resolveObject);

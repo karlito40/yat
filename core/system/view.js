@@ -1,6 +1,6 @@
 var jade = require('jade')
 , HTTP = require('constant-list').HTTP
-, Promise = require('promise')
+, denodeify = require('promise').denodeify
 , resolveObject = require('../helper/promise').resolveObject
 , React = require('react') 
 , ReactDOMServer = require("react-dom/server");
@@ -11,7 +11,7 @@ module.exports.error = error;
 module.exports.partial = partial;
 module.exports.react = react;
 
-var renderFile = Promise.denodeify(jade.renderFile);
+var renderFile = denodeify(jade.renderFile);
 
 function _result(contentType, body) {
   return {

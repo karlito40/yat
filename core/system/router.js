@@ -8,7 +8,6 @@
 var HTTP = require('constant-list').HTTP
 , View = require('./view')
 , querystring = require('querystring')
-, Promise = require('promise')
 , Response = require('./response')
 , Pipeline = require('../combine/pipeline')
 , fs = require('fs')
