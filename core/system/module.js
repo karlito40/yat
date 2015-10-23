@@ -1,3 +1,5 @@
+'use strict';
+
 var list = [];
 
 module.exports.add = add;
@@ -7,9 +9,9 @@ function add(patch) {
   if(Array.isArray(patch)) {
     list = list.concat(patch);
   } else {
-    list.push(patch);  
+    list.push(patch);
   }
-  
+
 }
 
 function start() {

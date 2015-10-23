@@ -1,3 +1,5 @@
+'use strict';
+
 var ArrayHelper = require('../helper/array');
 
 module.exports.trigger = trigger;
@@ -11,7 +13,7 @@ function register(name, cb) {
   if(!channels[name]) {
     channels[name] = [];
   }
-  
+
   channels[name].push(cb);
   return cb;
 }
@@ -20,11 +22,11 @@ function trigger(name) {
   if(!channels[name]) {
     return 0;
   }
-  
+
   channels[name].forEach(function(job){
     job();
   });
-  
+
   return channels[name].length
 }
 
@@ -39,15 +41,13 @@ function dispose(cb) {
       }
       return true;
     }
-    
+
   }
-  
+
   return false;
-  
+
 }
 
 function getChannel(name) {
   return channels[name];
 }
-
-

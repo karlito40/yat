@@ -1,23 +1,29 @@
-function Pipeline(middlewares) {
-  this.middlewares = middlewares;
-  this.iterator = 0;
-}
+'use strict';
 
-Pipeline.prototype.execute = function() {
-  if(!this.middlewares[this.iterator]) {
-    return;
+class Pipeline {
+
+  constructor(middlewares) {
+    this.middlewares = middlewares;
+    this.iterator = 0;
   }
-  this.middlewares[this.iterator](this.next.bind(this));
-}
 
-Pipeline.prototype.next = function() {
-  this.iterator++;
-  this.execute();
-}
+  execute() {
+    if(!this.middlewares[this.iterator]) {
+      return;
+    }
 
-Pipeline.prototype.reset = function() {
-  this.iterator = 0;
-  this.execute();
+    this.middlewares[this.iterator](this.next.bind(this));
+  }
+
+  next() {
+    this.iterator++;
+    this.execute();
+  }
+
+  reset() {
+    this.iterator = 0;
+    this.execute();
+  }
 }
 
 module.exports = Pipeline;
