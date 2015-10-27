@@ -1,8 +1,8 @@
-var jade = require('jade')
+const jade = require('jade')
 , HTTP = require('constant-list').HTTP
 , denodeify = require('promise').denodeify
 , resolveObject = require('../helper/promise').resolveObject
-, React = require('react') 
+, React = require('react')
 , ReactDOMServer = require("react-dom/server");
 
 module.exports.render = render;
@@ -11,7 +11,7 @@ module.exports.error = error;
 module.exports.partial = partial;
 module.exports.react = react;
 
-var renderFile = denodeify(jade.renderFile);
+const renderFile = denodeify(jade.renderFile);
 
 function _result(contentType, body) {
   return {
@@ -24,7 +24,7 @@ function render(viewName, data) {
   var format = function(view) {
     return _result('text/html', view);
   };
-  
+
   return partial(viewName, data)
     .then(format);
 }
@@ -33,11 +33,11 @@ function partial(viewName, data) {
   var resolveData = function() {
     return resolveObject(data);
   };
-  
+
   var compile = function(content) {
     return renderFile(`./views/${viewName}.jade`, content);
   };
-  
+
   return resolveData(data)
     .then(compile)
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var ArrayHelper = require('../helper/array');
+const ArrayHelper = require('../helper/array');
 
 module.exports.trigger = trigger;
 module.exports.register = register;

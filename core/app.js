@@ -1,6 +1,6 @@
 'use strict';
 
-var Server = require('./http/server')
+const Server = require('./http/server')
 , Accessor = require('./combine/accessor')
 , VM = require('./file/vm')
 , Router = require('./system/router')
@@ -24,7 +24,7 @@ function start() {
     Router: new Router(),   // Router by default
   });
   Router.configure(Config)
-  
+
   Module.start();
 
   // Route to configure
@@ -40,11 +40,11 @@ function start() {
 
   });
 
-  var port = Config.get('port');
-  var debug = Config.get('DEBUG');
+  const port = Config.get('port');
+  const debug = Config.get('DEBUG');
 
   console.log('App start on port', port);
   console.log('Debug mode is set to', debug);
-  
+
   Server.start(Config, Router.Dispatcher);
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var View = require('./view')
+const View = require('./view')
 , Event = require('./event')
 , HTTP = require('constant-list').HTTP
 , mime = require('mime')
@@ -71,7 +71,7 @@ class Response {
       return View.error('Response type not implemented');
     }, HTTP.NOT_IMPLEMENTED)
   }
-  
+
 }
 
 module.exports = Response;

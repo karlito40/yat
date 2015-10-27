@@ -5,19 +5,19 @@
 // or the server will hang
 
 
-var HTTP = require('constant-list').HTTP
+const HTTP = require('constant-list').HTTP
 , View = require('./view')
 , querystring = require('querystring')
 , Response = require('./response')
 , Pipeline = require('../combine/pipeline')
 , fs = require('fs')
 , maxPostData = 2 * 1024 * 1024 // 2mb
+, methods = [HTTP.GET, HTTP.POST, HTTP.PUT, HTTP.DELETE]
 ;
 
 module.exports = Router;
 
-var methods = [HTTP.GET, HTTP.POST, HTTP.PUT, HTTP.DELETE]
-, publicFolder = './public'
+var publicFolder = './public'
 , directHandlers = {}
 , fallbackHandlers = {};
 

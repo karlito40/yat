@@ -1,16 +1,16 @@
-var JS = require('constant-list').JS
+const JS = require('constant-list').JS
 , denodeify = require('promise').denodeify;
 
 function resolveObject(data, cb) {
   if(!data) {
     return cb(null, data);
   }
-  
+
   var res = {}
   , nbKey = Object.keys(data).length
   , refLength = 0
   , done = false;
-  
+
   function addRef(key, value) {
     res[key] = value;
     refLength++;
@@ -19,9 +19,9 @@ function resolveObject(data, cb) {
       done = true;
     }
   }
-  
+
   for(var key in data) {
-    var value = data[key]; 
+    var value = data[key];
     if(typeof value == JS.OBJECT && value.then) {
       value.then(
           (function(key) {
@@ -33,13 +33,13 @@ function resolveObject(data, cb) {
         .catch(function(e) {
           if(!done) {
             done = true;
-            cb(e);  
+            cb(e);
           }
         });
     } else {
       addRef(key, value);
     }
-    
+
   }
 }
 
