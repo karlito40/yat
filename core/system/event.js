@@ -23,8 +23,11 @@ function trigger(name) {
     return 0;
   }
 
+  args = Array.prototype.slice.call(arguments)
+  args.shift()
+
   channels[name].forEach(function(job){
-    job();
+    job.apply(null, args);
   });
 
   return channels[name].length
