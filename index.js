@@ -5,6 +5,5 @@ require('node-jsx').install({
   extension: '.jsx'
 });
 
-
-const App = require('./core/app');
+App = require('./core/app');
 App.start();
