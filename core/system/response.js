@@ -14,6 +14,7 @@ class Response {
   }
 
   send(view) {
+    
     if(!this.code) {
       return this._notImplemented();
     }
@@ -22,7 +23,7 @@ class Response {
       'Content-Type': view.contentType
     });
 
-    Event.trigger(Event.RESPONSE, this);
+    //Event.trigger(Event.RESPONSE, this);
 
     this.res.end(view.body);
     return this.res;

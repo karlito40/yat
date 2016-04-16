@@ -23,8 +23,9 @@ Module.add([
  */
 
 Router.get('/', function() {
+  console.log('lala')
   var reactComponent = require("../../public/js/components/app");
-
+  console.log('toto');
   this.render('test', {
     hello: 'world',
     partialTest: this.react(reactComponent)
