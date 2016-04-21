@@ -1,6 +1,6 @@
 {
   "name": "ya-framework",
-  "version": "0.0.5",
+  "version": "0.1.1",
   "description": "Yet another framework",
   "main": "index.js",
   "scripts": {

@@ -15,13 +15,21 @@ Modularity is geat but sometime you just need something that works out of the bo
 + Code deploy test (vm.. meteor)
 + jslint
 ```
-npm install yat -g
+npm install yat
 ```
 
-### [TODO] Command line
+### Command line
+
+Create a new project
 
 ```
-yat create MyProject
+node node_modules/.bin/yat ```
+
+Launch a project
+
+```
+node node_modules/ya-framework/index.js
+
 ```
 
 + bootstrap.js  (everything can be set here: route, app, module, model, ...)
@@ -33,15 +41,6 @@ yat create MyProject
 + public        (assets folder)
 + views         (jade only)
 + linter
-
-```
-yat router add my_route
-```
-
-Generate:
-
-+ routes/my_route.js
-
 
 ### [WORKING] Bootstrap example
 ```
@@ -75,16 +74,15 @@ Router.get('/', function() {
 
 ```
 
-### [WORKING] Router example
+### Router example
 
 ```
 // bootstrap.js
 // no require need
 
 // Use a react component in a view (seo)
+var reactComponent = require("../../public/js/components/app");
 Router.get('/react', function() {
-
-  var reactComponent = require("../../public/js/components/app");
 
   this.render('test', {
     hello: 'world',
