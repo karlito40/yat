@@ -3,6 +3,10 @@ const Forge = require('forge-struct');
 Forge.create([
     'routes',
     'public/js',
+    'modules',
+    'models',
+    'database',
+    
     { path: 'views/test.jade', content: `
 doctype html  
 html(lang="en")
