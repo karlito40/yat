@@ -43,8 +43,10 @@ node node_modules/ya-framework/index.js
 + views         (jade only)
 + linter
 
-### [WORKING] Bootstrap example
+###  Bootstrap example
+
 ```
+
 // DOES NOT NEED ANY REQUIRE
 
 // Optional
