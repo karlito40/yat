@@ -1,10 +1,11 @@
 {
   "name": "ya-framework",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Yet another framework",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "./bin/start.sh"
   },
   "repository": {
     "type": "git",

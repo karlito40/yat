@@ -13,19 +13,17 @@ App.set({
   //   cert: './cert'
   // }
 });
-
-Module.add([
-  require('../../modules/cache/varnish')
-]);
+  
+// Module.add([
+//   require('../../modules/cache/varnish')
+// ]);
 
 /**
- * Router configuration
  */
+var reactComponent = require("../../public/js/components/app");
 
 Router.get('/', function() {
-  console.log('lala')
-  var reactComponent = require("../../public/js/components/app");
-  console.log('toto');
+
   this.render('test', {
     hello: 'world',
     partialTest: this.react(reactComponent)
