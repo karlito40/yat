@@ -23,7 +23,8 @@ npm install yat
 Create a new project
 
 ```
-node node_modules/.bin/yat ```
+node node_modules/.bin/yat 
+```
 
 Launch a project
 
