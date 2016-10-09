@@ -23,7 +23,7 @@ App.set({
 var reactComponent = require("../../public/js/components/app");
 
 Router.get('/', function() {
-
+  this.session.set('test', {yolo: 'toto'});
   this.render('test', {
     hello: 'world',
     partialTest: this.react(reactComponent)

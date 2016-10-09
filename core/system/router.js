@@ -13,6 +13,8 @@ const HTTP = require('constant-list').HTTP
 , fs = require('fs')
 , maxPostData = 2 * 1024 * 1024 // 2mb
 , methods = [HTTP.GET, HTTP.POST, HTTP.PUT, HTTP.DELETE]
+, Session = require('../session/session')
+, RediStore = require('../session/redis_store')
 ;
 
 module.exports = Router;
@@ -137,19 +139,22 @@ function UriResolver(req, res, uri, next) {
   );
 
   if(handler) {
+    var session = new Session(RediStore, req, res);
 
-    return getBody(req)
+    return session.restore(function(){
+      return getBody(req);
+    })
       .then(function(body){
         handler.args.push(body);
 
         return handler.cb.apply({
           req: req,
           res: res,
-
+          session: session,
           render: response.render.bind(response),
           json: response.json.bind(response),
           partial: View.partial,
-          react: View.react
+          react: View.react,
         }, handler.args);
 
       })
@@ -158,7 +163,7 @@ function UriResolver(req, res, uri, next) {
           return response.error('ENTITY TOO LARGE', e);
         }
 
-        return response.error('FORBIDDEN', HTTP.FORBIDDEN);
+        return response.error('FORBIDDEN ' + e, HTTP.FORBIDDEN);
       });
   }
 

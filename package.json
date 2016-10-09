@@ -17,6 +17,7 @@
     "browserify": "^11.2.0",
     "chai": "^3.3.0",
     "constant-list": "0.0.6",
+    "cookie": "^0.3.1",
     "debug": "^2.2.0",
     "forge-struct": "0.0.3",
     "glob": "^5.0.15",
@@ -27,7 +28,9 @@
     "node-jsx": "^0.13.3",
     "promise": "^7.0.4",
     "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "redis": "^2.6.2",
+    "uniqid": "^4.1.0"
   },
   "bin": {
     "yat": "bin/yat.js"
