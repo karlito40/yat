@@ -39,8 +39,8 @@ Router.configure = function(options) {
 methods.forEach(function(method){
 
   Router.prototype[method] = (function(method) {
-    return function(uri, cb) {
-      return register(method, `${this.root}${uri}`, cb);
+    return function(uri, cb, middleware) {
+      return register(method, `${this.root}${uri}`, cb, middleware);
     }
   })(method);
 
@@ -50,16 +50,16 @@ methods.forEach(function(method){
 });
 
 
-function register(method, uri, cb) {
-  addDirectHandler(method, uri, cb);
-  addFallbackHandler(method, uri, cb);
+function register(method, uri, cb, middleware) {
+  addDirectHandler(method, uri, cb, middleware);
+  addFallbackHandler(method, uri, cb, middleware);
 }
 
 
 /**
  * Handle the uris without any parameter
  */
-function addDirectHandler(method, uri, cb) {
+function addDirectHandler(method, uri, cb, middleware) {
   if(!directHandlers[method]) {
     directHandlers[method] = {};
   }
@@ -70,7 +70,8 @@ function addDirectHandler(method, uri, cb) {
 
   directHandlers[method][uri] = {
     cb: cb,
-    args: []
+    args: [],
+    middleware: middleware || []
   };
 
 }
@@ -79,7 +80,7 @@ function addDirectHandler(method, uri, cb) {
  * Handle the variable uris
  * Example: /foo/:uid/simple/:anotherUid
  */
-function addFallbackHandler(method, uri, cb) {
+function addFallbackHandler(method, uri, cb, middleware) {
 
   var pathList = getPathList(uri);
 
@@ -100,7 +101,8 @@ function addFallbackHandler(method, uri, cb) {
 
   fallbackHandlers[method][pathList.length].push({
     description: description,
-    cb: cb
+    cb: cb,
+    middleware: middleware || []
   });
 
 }
@@ -145,9 +147,7 @@ function UriResolver(req, res, uri, next) {
       return getBody(req);
     })
       .then(function(body){
-        handler.args.push(body);
-
-        return handler.cb.apply({
+        var toBind = {
           req: req,
           res: res,
           session: session,
@@ -155,9 +155,19 @@ function UriResolver(req, res, uri, next) {
           json: response.json.bind(response),
           partial: View.partial,
           react: View.react,
-        }, handler.args);
+        };
+        
+
+        var pipeline = new Pipeline(handler.middleware, function(){
+          handler.args.push(body);
+          return handler.cb.apply(toBind, handler.args);
+        }, toBind);
+        pipeline.execute();
+        
+        
 
       })
+      
       .catch(function(e) {
         if(e == HTTP.REQUEST_ENTITY_TOO_LARGE) {
           return response.error('ENTITY TOO LARGE', e);

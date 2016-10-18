@@ -14,13 +14,17 @@ App.set({
   // }
 });
   
-// Module.add([
-//   require('../../modules/cache/varnish')
-// ]);
+const reactComponent = require("../../public/js/components/app");
 
-/**
- */
-var reactComponent = require("../../public/js/components/app");
+var isAuth = function(next){
+  if(!this.session.get('auth')) {
+    console.log('!auth')
+  } else {
+    console.log('is auth')
+  }
+  next();
+  
+}
 
 Router.get('/', function() {
   this.session.set('test', {yolo: 'toto'});
@@ -28,7 +32,7 @@ Router.get('/', function() {
     hello: 'world',
     partialTest: this.react(reactComponent)
   });
-});
+}, [isAuth]);
 
 Router.get('/simple/:uid', function(uid, body) {
   this.res.end('You Posted:\n' + uid);

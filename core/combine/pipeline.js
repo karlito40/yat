@@ -2,17 +2,18 @@
 
 class Pipeline {
 
-  constructor(middlewares) {
+  constructor(middlewares, onComplete, scope) {
     this.middlewares = middlewares;
+    this.onComplete = onComplete;
+    this.scope = scope;
     this.iterator = 0;
   }
 
   execute() {
     if(!this.middlewares[this.iterator]) {
-      return;
+      return (this.onComplete || function(){})();
     }
-
-    this.middlewares[this.iterator](this.next.bind(this));
+    this.middlewares[this.iterator].call(this.scope, this.next.bind(this));
   }
 
   next() {
